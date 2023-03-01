@@ -38,7 +38,7 @@
             @enderror
         </div>
 
-        @if(Auth::user()->hasAnyRole('admin', 'contabilidad'))
+        @if(auth()->user()->hasAnyRole('admin', 'contabilidad'))
             <div class="buttons mb-3">
                 <button type="button" id="btn-editar" class="btn btn-secondary" onclick="editar()">Editar</button>
                 <button type="button" id="btn-cancelar" class="btn btn-danger" onclick="cancelEditar()" hidden>Cancelar</button>

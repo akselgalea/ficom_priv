@@ -223,11 +223,13 @@
             @enderror
         </div>
         
-        <div class="buttons">
-            <button type="button" id="btn-editar" class="btn btn-secondary" onclick="editar()">Editar</button>
-            <button type="button" id="btn-cancelar" class="btn btn-danger" onclick="cancelEditar()" hidden>Cancelar</button>
-            <button type="submit" id="btn-enviar" class="btn btn-primary" hidden>Guardar</button>
-        </div>
+        @if(auth()->user()->hasAnyRole('admin', 'matriculas'))
+            <div class="buttons">
+                <button type="button" id="btn-editar" class="btn btn-secondary" onclick="editar()">Editar</button>
+                <button type="button" id="btn-cancelar" class="btn btn-danger" onclick="cancelEditar()" hidden>Cancelar</button>
+                <button type="submit" id="btn-enviar" class="btn btn-primary" hidden>Guardar</button>
+            </div>
+        @endif
     </form>
 
     @if($hAT)

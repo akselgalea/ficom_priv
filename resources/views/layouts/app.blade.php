@@ -50,7 +50,7 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('estudiante.index') }}">Listado de estudiantes</a>
                             </li>
-                            @if(Auth::user()->hasAnyRole('admin', 'matriculas'))
+                            @if(auth()->user()->hasAnyRole('admin', 'matriculas'))
                                 <li class="nav-item">
                                     <a class="nav-link" href="{{ route('estudiante.create') }}">Estudiante nuevo</a>
                                 </li>
