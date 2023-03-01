@@ -1,0 +1,27 @@
+.beca, .curso, .estudiante {
+    justify-content: space-between;
+    padding: 0.75rem;
+    height: 100% !important;
+
+    .nombre {
+        width: 100%;
+        font-weight: 600;
+        text-align: center;
+        letter-spacing: 1px;
+    }
+
+    .descripcion {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;  
+        overflow: hidden;
+    }
+
+    .buttons.d-flex {
+        gap: .5rem;
+    }
+}
+
+#descripcion {
+    height: 115px;
+}

@@ -1,0 +1,35 @@
+.tabla-pagos-container {
+    overflow-x: scroll;
+}
+.tabla-pagos {
+    th {
+        text-align: center;
+    }
+    th, td {
+        vertical-align: middle;
+    }
+
+    .multiples-pagos {
+        padding: 0px;
+        
+        .detalles:not(:last-child) {
+            border-bottom: solid 1px black;
+        }
+        
+        .detalles {
+            width: 100%;
+            height: auto;
+
+            div {
+                display: table-cell;
+                align-content: center;
+                text-align: center;
+                padding: .5rem;
+            }
+
+            div:not(:first-child) {
+                border-left: 1px solid black;
+            }
+        }
+    }
+}
