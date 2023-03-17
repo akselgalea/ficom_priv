@@ -69,6 +69,7 @@ class Estudiante extends Model
     {
         return $this->belongsTo(Curso::class);
     }
+
     /**
      * Get all of the pagos for the Estudiante
      *
@@ -99,13 +100,13 @@ class Estudiante extends Model
             'prioridad' => 'required',
             'a_nombres' => Rule::requiredIf($hasApoderado),
             'a_apellidos' => Rule::requiredIf($hasApoderado),
-            'a_telefono' => [Rule::requiredIf($hasApoderado), 'min:8', 'max:12'],
-            'a_email' => [Rule::requiredIf($hasApoderado), 'email'],
+            'a_telefono' => [Rule::requiredIf($hasApoderado), 'min:8', 'max:12', 'nullable'],
+            'a_email' => [Rule::requiredIf($hasApoderado), 'email', 'nullable'],
             'a_direccion' => Rule::requiredIf($hasApoderado),
             'sub_nombres' => Rule::requiredIf($hasApoderadoSuplente),
             'sub_apellidos' => Rule::requiredIf($hasApoderadoSuplente),
-            'sub_telefono' => [Rule::requiredIf($hasApoderadoSuplente), 'min:8', 'max:12'],
-            'sub_email' => [Rule::requiredIf($hasApoderadoSuplente), 'email'],
+            'sub_telefono' => [Rule::requiredIf($hasApoderadoSuplente), 'min:8', 'max:12', 'nullable'],
+            'sub_email' => [Rule::requiredIf($hasApoderadoSuplente), 'email', 'nullable'],
             'sub_direccion' => Rule::requiredIf($hasApoderadoSuplente)
         ];
     }
@@ -218,6 +219,25 @@ class Estudiante extends Model
                     return $mes;
             }
         }
+    }
+
+    public function pagosMes($year, $month) {
+        return $this->pagos()->where(['anio' => $year, 'mes' => $month])->get();
+    }
+
+    public function totalPagadoMes($year, $month) {
+        $total = 0;
+        foreach ($this->pagosMes($year, $month) as $pago) $total += $pago->valor;
+        return $total;
+    }
+
+    /*
+        Params year, month, tAp -> total a pagar
+        returns integer -- total que falta pagar en ese mes
+    */
+    public function totalAPagar($year, $month, $tAP) {
+        $this->totalPagadoMes($year, $month);
+        return $tAP - $this->totalPagadoMes($year, $month);
     }
 
     public function scopeSearchByName($query, $text)
@@ -382,11 +402,23 @@ class Estudiante extends Model
 
     public function storePago($id, $req)
     {
+        $estudiante = Estudiante::find($id);
+        if(!$estudiante) return ['status' => 400, 'message' => 'No se encontro al estudiante'];
+        if($estudiante->prioridad == 'prioritario') return ['status' => 400, 'message' => 'Los estudiantes prioritarios no deben pagar'];
+        
         $pago = new Pago;
-        $req->validate($pago->rules(), $pago->messages(), $pago->attributes());
+        $maxPago = $estudiante->totalAPagar($req->anio, $req->mes, $req->total);
+        
+        if($maxPago <= 0) return ['status' => 400, 'message' => 'Este mas ya ha sido pagado completamente'];
+
+        $req->validate(
+            $pago->rules($req->num_documento, $maxPago),
+            $pago->messages($req->mes, $maxPago),
+            $pago->attributes()
+        );
         
         try {
-            Estudiante::find($id)->pagos()->create($req->all());
+            $estudiante->pagos()->create($req->all());
             return ['status' => 200, 'message' => 'Pago registrado con éxito'];
         } catch (Exception $e) {
             return ['status' => 400, 'message' => 'Ha ocurrido un error'];
@@ -420,7 +452,7 @@ class Estudiante extends Model
     public function registrosFicom($req)
     {
         return [
-            'RBD' => $req['rbd'],
+            'RBD' => env('RBD'),
             'Posee RUN' => $this->poseeRun(),
             'RUN alumno' => $this->rut . '-' . $this->dv,
             'DV alumno' => $this->dv,
@@ -428,7 +460,7 @@ class Estudiante extends Model
             'Monto total mensualidad' => $this->totalMensualidades($req['anio']),
             'Monto total intereses y/o gastos de cobranza' => 0,
             'Cantidad de mensualidades' => $this->mesesPagados($req['anio']),
-            'Tipo de Documento' => $req['tipoDocumento']
+            'Tipo de Documento' => env('TIPO_DOCUMENTO')
         ];
     }
 
@@ -464,7 +496,7 @@ class Estudiante extends Model
 
         foreach ($this->pagosPorAnio($anio) as $mes => $pagosMes)
             if ($mes != 'matricula') foreach ($pagosMes as $pago)
-                    $total += $pago->valor;
+                $total += $pago->valor;
 
         return $total;
     }

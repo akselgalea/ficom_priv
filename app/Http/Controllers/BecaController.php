@@ -40,6 +40,6 @@ class BecaController extends Controller
     }
 
     public function destroy($id) {
-        $this->beca->borrar($id);
+        return $this->beca->borrar($id);
     }
 }

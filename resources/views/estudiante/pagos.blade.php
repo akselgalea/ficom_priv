@@ -2,9 +2,12 @@
 @section('content')
 @php
     $descuento = 0;
-    if($estudiante->prioridad == 'prioritario') $descuento = 0;
-    else if(! is_null($estudiante->beca)) $descuento = $estudiante->beca->descuento;
-    $total = $estudiante->curso->arancel * ($descuento / 100);
+    if($estudiante->prioridad == 'prioritario') $total = 0;
+    else if(! is_null($estudiante->beca)) {
+        $descuento = $estudiante->beca->descuento;
+        $total = $estudiante->curso->arancel * ($descuento / 100);
+    } 
+    else $total = $estudiante->curso->arancel;
     $mesAPagar = $estudiante->mesFaltante($estudiante->pagos_anio, $total);
 @endphp
 
@@ -149,6 +152,8 @@
                 </span>
             @enderror
         </div>
+
+        <input type="hidden" name="total" value="{{$total}}" />
         <div>
             <button class="btn btn-primary">Enviar</button>
             <button type="button" class="btn btn-danger" onclick="cancelForm()">Cancelar</button>

@@ -37,25 +37,26 @@ class Pago extends Model
         return $this->belongsTo(Estudiante::class);
     }
 
-    public function rules($id = null): array {
+    public function rules($id = null, $maxPago): array {
         return [
             'mes' => 'required',
             'anio' => 'required',
             'documento' => 'required',
             'num_documento' => ['required', Rule::unique('pagos')->ignore($id)],
             'fecha_pago' => 'required',
-            'valor' => 'required',
+            'valor' => "required|numeric|max:$maxPago",
             'forma' => 'required',
             'observacion' => 'required'
         ];
     }
 
-    public function messages(): array {
+    public function messages($mes, $maxPago): array {
         return [
-            'nombre.unique' => 'Este documento ya se encuentra registrado',
+            'num_documento.unique' => 'Este documento ya se encuentra registrado',
             'required' => 'El campo :attribute es obligatorio',
             'min' => 'El campo :attribute requiere un minimo de :min caracteres',
-            'max' => 'El campo :attribute requiere un maximo de :max caracteres'
+            'max' => 'El campo :attribute requiere un maximo de :max caracteres',
+            'valor.max' => "El monto que ingresaste excede el monto a pagar $maxPago en el mes de $mes"
         ];
     }
 

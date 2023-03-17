@@ -7,7 +7,7 @@
         
         <div class="form-group mb-3 col-6">
             <label class="form-label" for="nombre">Nombre</label>
-            <input class="form-control @error('nombre') is-invalid @enderror" type="text" id="nombre" name="nombre" value="{{old('nombre') ? old('nombre') : $beca['nombre']}}">
+            <input class="form-control @error('nombre') is-invalid @enderror" type="text" id="nombre" name="nombre" value="{{old('nombre') ?? $beca['nombre']}}" disabled>
 
             @error('nombre')
                 <span class="invalid-feedback" role="alert">
@@ -18,7 +18,7 @@
 
         <div class="form-group mb-3 col-6">
             <label class="form-label" for="descuento">% Descuento</label>
-            <input class="form-control @error('descuento') is-invalid @enderror" type="number" id="descuento" name="descuento" value="{{old('descuento') ? old('descuento') : $beca['descuento']}}" min="0" max="100">
+            <input class="form-control @error('descuento') is-invalid @enderror" type="number" id="descuento" name="descuento" value="{{old('descuento') ?? $beca['descuento']}}" min="0" max="100" disabled>
 
             @error('descuento')
                 <span class="invalid-feedback" role="alert">
@@ -29,7 +29,7 @@
 
         <div class="form-group mb-3 col-12">
             <label class="form-label" for="descripcion">Descripción</label>
-            <textarea class="form-control @error('descripcion') is-invalid @enderror" id="descripcion" name="descripcion">{{old('descripcion') ? old('descripcion') : $beca['descripcion']}}</textarea>
+            <textarea class="form-control @error('descripcion') is-invalid @enderror" id="descripcion" name="descripcion" disabled>{{old('descripcion') ?? $beca['descripcion']}}</textarea>
 
             @error('descripcion')
                 <span class="invalid-feedback" role="alert">

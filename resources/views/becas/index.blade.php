@@ -1,4 +1,7 @@
 @extends('layouts.app')
+@php
+    if(isset($res)) exit();
+@endphp
 @section('content')
     <div class="container">
         <h2 class="mb-3">Becas</h2>
