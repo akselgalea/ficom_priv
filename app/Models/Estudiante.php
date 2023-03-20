@@ -179,8 +179,8 @@ class Estudiante extends Model
     public function show($id)
     {
         $estudiante = Estudiante::with('curso', 'beca')->find($id);
-        $estudiante->apoderado_titular = $estudiante->apoderadoTitular()->first();
-        $estudiante->apoderado_suplente = $estudiante->apoderadoSuplente()->first();
+        $estudiante["apoderado_titular"] = $estudiante->apoderadoTitular()->first();
+        $estudiante["apoderado_suplente"] = $estudiante->apoderadoSuplente()->first();
 
         return ['estudiante' => $estudiante, 'cursos' => Curso::all(), 'becas' => Beca::all()];
     }
