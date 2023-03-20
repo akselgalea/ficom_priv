@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
+        "ext-simplexml": "*",
         "freshwork/chilean-bundle": "^2.1",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^9.19",
@@ -37,7 +38,7 @@
             "Tests\\": "tests/"
         },
         "files": [
-            "app/helpers/helpers.php"
+            "app/Helpers/helpers.php"
         ]
     },
     "scripts": {
