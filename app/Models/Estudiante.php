@@ -54,17 +54,16 @@ class Estudiante extends Model
         return $this->apoderados()->wherePivot('es_suplente', true);
     }
 
-    /**
-     * Get the curso that owns the Estudiante
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-
     public function beca(): BelongsTo
     {
         return $this->belongsTo(Beca::class);
     }
 
+    /**
+     * Get the curso that owns the Estudiante
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function curso(): BelongsTo
     {
         return $this->belongsTo(Curso::class);
@@ -225,9 +224,11 @@ class Estudiante extends Model
         return $this->pagos()->where(['anio' => $year, 'mes' => $month])->get();
     }
 
-    public function totalPagadoMes($year, $month) {
+    public function totalPagadoMes($pagosMes) {
         $total = 0;
-        foreach ($this->pagosMes($year, $month) as $pago) $total += $pago->valor;
+            foreach ($pagosMes as $pago)
+                $total += $pago->valor;
+
         return $total;
     }
 
@@ -236,8 +237,7 @@ class Estudiante extends Model
         returns integer -- total que falta pagar en ese mes
     */
     public function totalAPagar($year, $month, $tAP) {
-        $this->totalPagadoMes($year, $month);
-        return $tAP - $this->totalPagadoMes($year, $month);
+        return $tAP - $this->totalPagadoMes($this->pagosMes($year, $month));
     }
 
     public function scopeSearchByName($query, $text)
@@ -477,11 +477,10 @@ class Estudiante extends Model
 
         foreach ($this->pagosPorAnio($anio) as $mes => $pagosMes) {
             if ($mes != 'matricula') {
-                if (count($pagosMes) == 0)
-                    continue;
-                $total = 0;
-                foreach ($pagosMes as $pago)
-                    $total += $pago->valor;
+                if (count($pagosMes) == 0) continue;
+                
+                $total = $this->totalPagadoMes($pagosMes);
+                
                 if ($total == $this->curso->arancel)
                     $cantidad++;
             }
@@ -495,8 +494,8 @@ class Estudiante extends Model
         $total = 0;
 
         foreach ($this->pagosPorAnio($anio) as $mes => $pagosMes)
-            if ($mes != 'matricula') foreach ($pagosMes as $pago)
-                $total += $pago->valor;
+            if ($mes != 'matricula')
+                $total += $this->totalPagadoMes($pagosMes);
 
         return $total;
     }
@@ -505,9 +504,8 @@ class Estudiante extends Model
     {
         $meses = [];
         foreach ($this->pagosPorAnio($anio) as $mes => $pagosMes) {
-            $total = 0;
-            foreach ($pagosMes as $pago)
-                $total += $pago->valor;
+            $total = $this->totalPagadoMes($pagosMes);
+
             if ($total < $this->curso->arancel)
                 array_push($meses, ['mes' => $mes, 'pagado' => $total, 'falta' => $this->curso->arancel - $total]);
         }

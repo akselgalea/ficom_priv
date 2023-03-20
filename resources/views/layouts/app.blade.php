@@ -104,6 +104,7 @@
                         {{ $res['message'] }}
                     </div>
                 @endif
+                @php session()->forget('res'); @endphp
             @endif
 
             {{--
@@ -114,6 +115,8 @@
                 <div class="alert alert-info" role="alert">
                     {{ session('redirectMessage') }}
                 </div>
+
+                @php session()->forget('redirectMessage'); @endphp
             @endif
 
             @yield('content')

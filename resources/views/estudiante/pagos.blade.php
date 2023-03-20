@@ -208,7 +208,7 @@
                         <td class="multiples-pagos" colspan="6">
                             @foreach($estudiante->pagos_anio['matricula'] as $pago)
                                 <div class="detalles">
-                                    <div class="text-uppercase" style="width: 123px">{{ $pago['documento'] }}</div>
+                                    <div class="text-uppercase" style="width: 122px">{{ $pago['documento'] }}</div>
                                     <div style="width: 150px">{{ $pago['num_documento'] }}</div>
                                     <div style="width: 120px">{{ $pago['fecha_pago'] }}</div>
                                     <div style="width: 130px">{{ toCLP($pago['valor']) }}</div>
@@ -241,7 +241,7 @@
                         <td class="multiples-pagos" colspan="6">
                             @foreach($estudiante->pagos_anio['marzo'] as $pago)
                                 <div class="detalles">
-                                    <div class="text-uppercase" style="width: 123px">{{ $pago['documento'] }}</div>
+                                    <div class="text-uppercase" style="width: 122px">{{ $pago['documento'] }}</div>
                                     <div style="width: 150px">{{ $pago['num_documento'] }}</div>
                                     <div style="width: 120px">{{ $pago['fecha_pago'] }}</div>
                                     <div style="width: 130px">{{ toCLP($pago['valor']) }}</div>
@@ -274,7 +274,7 @@
                         <td class="multiples-pagos" colspan="6">
                             @foreach($estudiante->pagos_anio['abril'] as $pago)
                                 <div class="detalles">
-                                    <div class="text-uppercase" style="width: 123px">{{ $pago['documento'] }}</div>
+                                    <div class="text-uppercase" style="width: 122px">{{ $pago['documento'] }}</div>
                                     <div style="width: 150px">{{ $pago['num_documento'] }}</div>
                                     <div style="width: 120px">{{ $pago['fecha_pago'] }}</div>
                                     <div style="width: 130px">{{ toCLP($pago['valor']) }}</div>
@@ -307,7 +307,7 @@
                         <td class="multiples-pagos" colspan="6">
                             @foreach($estudiante->pagos_anio['mayo'] as $pago)
                                 <div class="detalles">
-                                    <div class="text-uppercase" style="width: 123px">{{ $pago['documento'] }}</div>
+                                    <div class="text-uppercase" style="width: 122px">{{ $pago['documento'] }}</div>
                                     <div style="width: 150px">{{ $pago['num_documento'] }}</div>
                                     <div style="width: 120px">{{ $pago['fecha_pago'] }}</div>
                                     <div style="width: 130px">{{ toCLP($pago['valor']) }}</div>
@@ -340,7 +340,7 @@
                         <td class="multiples-pagos" colspan="6">
                             @foreach($estudiante->pagos_anio['junio'] as $pago)
                                 <div class="detalles">
-                                    <div class="text-uppercase" style="width: 123px">{{ $pago['documento'] }}</div>
+                                    <div class="text-uppercase" style="width: 122px">{{ $pago['documento'] }}</div>
                                     <div style="width: 150px">{{ $pago['num_documento'] }}</div>
                                     <div style="width: 120px">{{ $pago['fecha_pago'] }}</div>
                                     <div style="width: 130px">{{ toCLP($pago['valor']) }}</div>
@@ -373,7 +373,7 @@
                         <td class="multiples-pagos" colspan="6">
                             @foreach($estudiante->pagos_anio['julio'] as $pago)
                                 <div class="detalles">
-                                    <div class="text-uppercase" style="width: 123px">{{ $pago['documento'] }}</div>
+                                    <div class="text-uppercase" style="width: 122px">{{ $pago['documento'] }}</div>
                                     <div style="width: 150px">{{ $pago['num_documento'] }}</div>
                                     <div style="width: 120px">{{ $pago['fecha_pago'] }}</div>
                                     <div style="width: 130px">{{ toCLP($pago['valor']) }}</div>
@@ -406,7 +406,7 @@
                         <td class="multiples-pagos" colspan="6">
                             @foreach($estudiante->pagos_anio['agosto'] as $pago)
                                 <div class="detalles">
-                                    <div class="text-uppercase" style="width: 123px">{{ $pago['documento'] }}</div>
+                                    <div class="text-uppercase" style="width: 122px">{{ $pago['documento'] }}</div>
                                     <div style="width: 150px">{{ $pago['num_documento'] }}</div>
                                     <div style="width: 120px">{{ $pago['fecha_pago'] }}</div>
                                     <div style="width: 130px">{{ toCLP($pago['valor']) }}</div>
@@ -439,7 +439,7 @@
                         <td class="multiples-pagos" colspan="6">
                             @foreach($estudiante->pagos_anio['septiembre'] as $pago)
                                 <div class="detalles">
-                                    <div class="text-uppercase" style="width: 123px">{{ $pago['documento'] }}</div>
+                                    <div class="text-uppercase" style="width: 122px">{{ $pago['documento'] }}</div>
                                     <div style="width: 150px">{{ $pago['num_documento'] }}</div>
                                     <div style="width: 120px">{{ $pago['fecha_pago'] }}</div>
                                     <div style="width: 130px">{{ toCLP($pago['valor']) }}</div>
@@ -472,7 +472,7 @@
                         <td class="multiples-pagos" colspan="6">
                             @foreach($estudiante->pagos_anio['octubre'] as $pago)
                                 <div class="detalles">
-                                    <div class="text-uppercase" style="width: 123px">{{ $pago['documento'] }}</div>
+                                    <div class="text-uppercase" style="width: 122px">{{ $pago['documento'] }}</div>
                                     <div style="width: 150px">{{ $pago['num_documento'] }}</div>
                                     <div style="width: 120px">{{ $pago['fecha_pago'] }}</div>
                                     <div style="width: 130px">{{ toCLP($pago['valor']) }}</div>
@@ -505,7 +505,7 @@
                         <td class="multiples-pagos" colspan="6">
                             @foreach($estudiante->pagos_anio['noviembre'] as $pago)
                                 <div class="detalles">
-                                    <div class="text-uppercase" style="width: 123px">{{ $pago['documento'] }}</div>
+                                    <div class="text-uppercase" style="width: 122px">{{ $pago['documento'] }}</div>
                                     <div style="width: 150px">{{ $pago['num_documento'] }}</div>
                                     <div style="width: 120px">{{ $pago['fecha_pago'] }}</div>
                                     <div style="width: 130px">{{ toCLP($pago['valor']) }}</div>
@@ -538,7 +538,7 @@
                         <td class="multiples-pagos" colspan="6">
                             @foreach($estudiante->pagos_anio['diciembre'] as $pago)
                                 <div class="detalles">
-                                    <div class="text-uppercase" style="width: 123px">{{ $pago['documento'] }}</div>
+                                    <div class="text-uppercase" style="width: 122px">{{ $pago['documento'] }}</div>
                                     <div style="width: 150px">{{ $pago['num_documento'] }}</div>
                                     <div style="width: 120px">{{ $pago['fecha_pago'] }}</div>
                                     <div style="width: 130px">{{ toCLP($pago['valor']) }}</div>
