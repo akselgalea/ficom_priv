@@ -87,6 +87,22 @@ class Estudiante extends Model
         return $this->apoderadoSuplente->count() > 0;
     }
 
+    public function getReporteFicomAttribute() {
+        $anio = '2023';
+
+        return [
+            'RBD' => env('RBD'),
+            'Posee RUN' => $this->poseeRun(),
+            'RUN alumno' => $this->rut . '-' . $this->dv,
+            'DV alumno' => $this->dv,
+            'Annio mensualidad percibida' => $anio,
+            'Monto total mensualidad' => $this->totalMensualidades($anio),
+            'Monto total intereses y/o gastos de cobranza' => 0,
+            'Cantidad de mensualidades' => $this->mesesPagados($anio),
+            'Tipo de Documento' => env('TIPO_DOCUMENTO')
+        ];
+    }
+
     private function rules($hasApoderado, $hasApoderadoSuplente, $id = null): array {
         return [
             'nombres' => 'required|max:255',
@@ -183,61 +199,6 @@ class Estudiante extends Model
         $estudiante["apoderado_suplente"] = $estudiante->apoderadoSuplente()->first();
 
         return ['estudiante' => $estudiante, 'cursos' => Curso::all(), 'becas' => Beca::all()];
-    }
-
-    public function pagosPorAnio($anio)
-    {
-        $pagos_anio = $this->pagos()->where('anio', $anio)->oldest()->get();
-
-        return [
-            'matricula' => $pagos_anio->where('mes', 'matricula'),
-            'marzo' => $pagos_anio->where('mes', 'marzo'),
-            'abril' => $pagos_anio->where('mes', 'abril'),
-            'mayo' => $pagos_anio->where('mes', 'mayo'),
-            'junio' => $pagos_anio->where('mes', 'junio'),
-            'julio' => $pagos_anio->where('mes', 'julio'),
-            'agosto' => $pagos_anio->where('mes', 'agosto'),
-            'septiembre' => $pagos_anio->where('mes', 'septiembre'),
-            'octubre' => $pagos_anio->where('mes', 'octubre'),
-            'noviembre' => $pagos_anio->where('mes', 'noviembre'),
-            'diciembre' => $pagos_anio->where('mes', 'diciembre')
-        ];
-    }
-
-    public function mesFaltante($pagos, $totalAPagar)
-    {
-        foreach ($pagos as $mes => $pagosMes) {
-            if ($mes != 'matricula') {
-                if (count($pagosMes) == 0)
-                    return $mes;
-
-                $total = 0;
-                foreach ($pagosMes as $pago)
-                    $total += $pago->valor;
-                if ($total < $totalAPagar)
-                    return $mes;
-            }
-        }
-    }
-
-    public function pagosMes($year, $month) {
-        return $this->pagos()->where(['anio' => $year, 'mes' => $month])->get();
-    }
-
-    public function totalPagadoMes($pagosMes) {
-        $total = 0;
-            foreach ($pagosMes as $pago)
-                $total += $pago->valor;
-
-        return $total;
-    }
-
-    /*
-        Params year, month, tAp -> total a pagar
-        returns integer -- total que falta pagar en ese mes
-    */
-    public function totalAPagar($year, $month, $tAP) {
-        return $tAP - $this->totalPagadoMes($this->pagosMes($year, $month));
     }
 
     public function scopeSearchByName($query, $text)
@@ -400,6 +361,15 @@ class Estudiante extends Model
         }
     }
 
+    public function apoderadoRemove($id, $apoderado) {
+        try {
+            Estudiante::findOrFail($id)->apoderados()->detach($apoderado);
+            return redirect()->back()->with('res', ['status' => 200, 'message' => 'Apoderado removido del estudiante con exito']);
+        } catch(Exception $e) {
+            return redirect()->back()->with('res', ['status' => 400, 'message' => 'No se pudo remover al apoderado']);
+        }
+    }
+
     public function storePago($id, $req)
     {
         $estudiante = Estudiante::find($id);
@@ -449,19 +419,61 @@ class Estudiante extends Model
         }
     }
 
-    public function registrosFicom($req)
+    public function pagosPorAnio($anio)
     {
+        $pagos_anio = $this->pagos()->where('anio', $anio)->oldest()->get();
+
         return [
-            'RBD' => env('RBD'),
-            'Posee RUN' => $this->poseeRun(),
-            'RUN alumno' => $this->rut . '-' . $this->dv,
-            'DV alumno' => $this->dv,
-            'Annio mensualidad percibida' => $req['anio'],
-            'Monto total mensualidad' => $this->totalMensualidades($req['anio']),
-            'Monto total intereses y/o gastos de cobranza' => 0,
-            'Cantidad de mensualidades' => $this->mesesPagados($req['anio']),
-            'Tipo de Documento' => env('TIPO_DOCUMENTO')
+            'matricula' => $pagos_anio->where('mes', 'matricula'),
+            'marzo' => $pagos_anio->where('mes', 'marzo'),
+            'abril' => $pagos_anio->where('mes', 'abril'),
+            'mayo' => $pagos_anio->where('mes', 'mayo'),
+            'junio' => $pagos_anio->where('mes', 'junio'),
+            'julio' => $pagos_anio->where('mes', 'julio'),
+            'agosto' => $pagos_anio->where('mes', 'agosto'),
+            'septiembre' => $pagos_anio->where('mes', 'septiembre'),
+            'octubre' => $pagos_anio->where('mes', 'octubre'),
+            'noviembre' => $pagos_anio->where('mes', 'noviembre'),
+            'diciembre' => $pagos_anio->where('mes', 'diciembre')
         ];
+    }
+
+    public function mesFaltante($pagos, $totalAPagar)
+    {
+        foreach ($pagos as $mes => $pagosMes) {
+            if ($mes != 'matricula') {
+                if (count($pagosMes) == 0)
+                    return $mes;
+
+                $total = 0;
+                foreach ($pagosMes as $pago)
+                    $total += $pago->valor;
+                if ($total < $totalAPagar)
+                    return $mes;
+            }
+        }
+    }
+
+    public function pagosMes($year, $month) {
+        return $this->pagos()->where(['anio' => $year, 'mes' => $month])->get();
+    }
+
+    public function totalPagadoMes($pagosMes) {
+        $total = 0;
+            foreach ($pagosMes as $pago)
+                $total += $pago->valor;
+
+        return $total;
+    }
+
+    /**
+     *   @param  string $year  --> año del pago
+     *   @param  string $month --> mes del pago
+     *   @param  integer $tAp  --> total a pagar
+     *   @return integer       --> total que falta pagar en ese mes
+    */
+    public function totalAPagar($year, $month, $tAP) {
+        return $tAP - $this->totalPagadoMes($this->pagosMes($year, $month));
     }
 
     public function poseeRun()
@@ -471,6 +483,10 @@ class Estudiante extends Model
         return 2;
     }
 
+    /**
+     *  Retorna la cantidad de mensualidades un estudiante ha pagado en X año
+     *  @return integer
+    */
     public function mesesPagados($anio)
     {
         $cantidad = 0;
@@ -489,6 +505,7 @@ class Estudiante extends Model
         return $cantidad;
     }
 
+    // La suma total de los pagos realizados dentro de X año
     public function totalMensualidades($anio)
     {
         $total = 0;
@@ -500,6 +517,7 @@ class Estudiante extends Model
         return $total;
     }
 
+    // Meses que el estudiante no ha pagado dentro de X año
     public function mesesPorPagar($anio)
     {
         $meses = [];
@@ -512,13 +530,19 @@ class Estudiante extends Model
 
         return $meses;
     }
-
-    public function apoderadoRemove($id, $apoderado) {
-        try {
-            Estudiante::findOrFail($id)->apoderados()->detach($apoderado);
-            return redirect()->back()->with('res', ['status' => 200, 'message' => 'Apoderado removido del estudiante con exito']);
-        } catch(Exception $e) {
-            return redirect()->back()->with('res', ['status' => 400, 'message' => 'No se pudo remover al apoderado']);
-        }
+    
+    public function registrosFicom($anio)
+    {
+        return [
+            'RBD' => env('RBD', 14901),
+            'Posee RUN' => $this->poseeRun(),
+            'RUN alumno' => $this->rut . '-' . $this->dv,
+            'DV alumno' => $this->dv,
+            'Annio mensualidad percibida' => $anio,
+            'Monto total mensualidad' => $this->totalMensualidades($anio),
+            'Monto total intereses y/o gastos de cobranza' => 0,
+            'Cantidad de mensualidades' => $this->mesesPagados($anio),
+            'Tipo de Documento' => env('TIPO_DOCUMENTO')
+        ];
     }
 }

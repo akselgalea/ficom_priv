@@ -185,7 +185,7 @@ return [
         /*
          * Package Service Providers...
          */
-
+        Maatwebsite\Excel\ExcelServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -199,10 +199,7 @@ return [
          * Aplication Permission Provider
         */
         Spatie\Permission\PermissionServiceProvider::class,
-
         Freshwork\ChileanBundle\Laravel\ChileanBundleServiceProvider::class
-
-
     ],
 
     /*
@@ -219,6 +216,7 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
         'Rut'   => Freshwork\ChileanBundle\Laravel\Facades\Rut::class,
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
     ])->toArray(),
 
 ];

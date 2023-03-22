@@ -1,6 +1,9 @@
 @extends('layouts.app')
 @section('content')
     <div class="container card" id="table">
+        <div class="buttons mb-3">
+            <a href="{{ route('estudiante.ficom.generar.all') }}" class="btn btn-primary">Generar reporte FICOM de todos los estudiantes</a>    
+        </div>
         <form class="buscador">
             <div>
                 <select class="form-select" name="perPage" id="curso-select">

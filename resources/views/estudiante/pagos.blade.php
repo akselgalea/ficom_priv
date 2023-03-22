@@ -13,6 +13,10 @@
 
 <div class="container card">
     <div class="row">
+        <div class="buttons mb-3">
+            <a href="{{ route('estudiante.ficom.generar', $estudiante->id) }}" class="btn btn-primary">Generar reporte FICOM</a>    
+        </div>
+
         <h2>Información del estudiante</h2>
         <div class="form-group mb-3 col-4">
             <label for="monto_mensual" class="form-label">Estudiante</label>

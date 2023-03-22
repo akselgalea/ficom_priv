@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\EstudianteController;
 use App\Http\Controllers\BecaController;
 use App\Http\Controllers\CursoController;
+use App\Http\Controllers\FicomController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +42,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/estudiantes/{id}/becas', [EstudianteController::class, 'becaDelete'])->name('estudiante.beca.delete');
         Route::get('/estudiantes/{id}/pagos', [EstudianteController::class, 'pagos'])->name('estudiante.pagos');
         Route::post('/estudiantes/{id}/registrar-pago', [EstudianteController::class, 'storePago'])->name('pago.store');
+        Route::get('/estudiantes/{id}/generar-reporte', [FicomController::class, 'createReport'])->name('estudiante.ficom.generar');
+        Route::get('/estudiantes/generar-reporte', [FicomController::class, 'createReportAll'])->name('estudiante.ficom.generar.all');
         
         //Becas
         Route::get('/becas/nueva', [BecaController::class, 'create'])->name('beca.create');
